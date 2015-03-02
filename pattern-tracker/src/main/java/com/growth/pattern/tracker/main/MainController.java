@@ -1,4 +1,4 @@
-package com.growth.patternizer.main;
+package com.growth.pattern.tracker.main;
 
 import java.net.UnknownHostException;
 

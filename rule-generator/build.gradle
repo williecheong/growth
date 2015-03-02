@@ -13,7 +13,7 @@ dependencies {
 }
 
 jar {
-    manifest.attributes 'Main-Class': 'com.growth.rulegenerator.MainController'
+    manifest.attributes 'Main-Class': 'com.growth.rule.generator.MainController'
     
     from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {
         // remove all signature files

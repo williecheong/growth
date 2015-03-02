@@ -8,14 +8,14 @@ common/.project
 common/build
 common/bin
 
-patternizer/.classpath
-patternizer/.settings
-patternizer/.project
-patternizer/build
-patternizer/bin
+pattern-tracker/.classpath
+pattern-tracker/.settings
+pattern-tracker/.project
+pattern-tracker/build
+pattern-tracker/bin
 
-rulegenerator/.classpath
-rulegenerator/.settings
-rulegenerator/.project
-rulegenerator/build
-rulegenerator/bin
+rule-generator/.classpath
+rule-generator/.settings
+rule-generator/.project
+rule-generator/build
+rule-generator/bin
