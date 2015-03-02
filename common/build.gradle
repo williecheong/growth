@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
 	compile "org.mongodb:mongo-java-driver:2.13.0"
+	compile "org.projectlombok:lombok:1.16.2"
 	compile "joda-time:joda-time:2.7"
 }
 

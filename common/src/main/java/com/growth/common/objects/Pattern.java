@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 import org.joda.time.DateTime;
 
-public class Pattern {
+import lombok.Data;
+
+public @Data class Pattern {
 	private String _id;
 	private String pattern;
 	private Instrument instrument;

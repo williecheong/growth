@@ -1,6 +1,8 @@
 package com.growth.common.objects;
 
-public class Trade {
+import lombok.Data;
+
+public @Data class Trade {
 	private String ticketId;
 	private Instrument instrument;
 	private Position position;
