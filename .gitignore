@@ -2,6 +2,7 @@
 .recommenders
 .gradle
 
+common/lib/oanda_fxtrade.jar
 common/.classpath
 common/.settings
 common/.project
