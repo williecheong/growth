@@ -20,3 +20,14 @@ rule-generator/.settings
 rule-generator/.project
 rule-generator/build
 rule-generator/bin
+/build/
+/bin/
+
+
+# intellij
+.idea
+*.iml
+.project
+.settings
+.classpath
+
