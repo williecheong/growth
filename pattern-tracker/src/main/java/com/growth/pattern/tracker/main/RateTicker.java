@@ -2,33 +2,28 @@ package com.growth.pattern.tracker.main;
 
 import com.oanda.fxtrade.api.*;
 
-
-/**
- * A simple event model example which prints all incoming rate ticks, and
- * watches a specific pair for tick changes
- *
- * @author Chris MacGregor
- */
 public class RateTicker {
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Usage: RateTicker [username] [password]");
-            System.exit(1);
-        }
-        // Connect to FXServer
-        FXClient fxclient = new FXGame();
-        FXClient fxclient = new API.createFXTrade();
 
-        System.out.print("Logging in as \"" + args[0] + "\"...");
+        API api = new API();
+
+        String login = "williec";
+        String password = "<fill this in>";
+
+        // Connect to FXServer
+        FXClient fxclient = api.createFXGame();
+
         fxclient.setWithRateThread(true);
         try {
-            fxclient.login(args[0], args[1]);
+            fxclient.login(login, password);
         } catch (SessionException e) {
             System.exit(1);
         } catch (InvalidUserException e) {
             System.exit(1);
         } catch (InvalidPasswordException e) {
             System.exit(1);
+        } catch (MultiFactorAuthenticationException e) {
+            e.printStackTrace();
         }
 
         //Register rate ticker event
