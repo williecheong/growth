@@ -16,37 +16,19 @@ public class IntstrumentHistoryRetriever {
         FXClient fxclient = api.createFXGame();
 
         fxclient.setWithRateThread(true);
-        try {
-            fxclient.login(login, password);
-        } catch (SessionException e) {
-            System.exit(1);
-        } catch (InvalidUserException e) {
-            System.exit(1);
-        } catch (InvalidPasswordException e) {
-            System.exit(1);
-        } catch (MultiFactorAuthenticationException e) {
-            e.printStackTrace();
-        }
+
+        fxclient.login(login, password);
 
 
-        //Register pair watcher event
-
-
-//        ArrayList<Object> array = new ArrayList<>();
+        // inputs:
 
         long interval = FXClient.INTERVAL_1_DAY;
         int numTicks = 5;
-
-
         FXPair fxPair = api.createFXPair("EUR/USD");
 
-        Object[] array;
+        //////
 
-
-        array = fxclient.getRateTable().getHistory(fxPair, interval, numTicks).toArray();
-
-
-        System.out.println(array.length);
+        Object[] array = fxclient.getRateTable().getHistory(fxPair, interval, numTicks).toArray();
 
         for (Object o : array) {
             System.out.println(o);
@@ -55,6 +37,4 @@ public class IntstrumentHistoryRetriever {
         //Done, quit now
         fxclient.logout();
     }
-
-
 }
