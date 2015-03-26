@@ -3,12 +3,13 @@ package com.growth.pattern.tracker.main;
 import com.oanda.fxtrade.api.*;
 
 public class RateTicker {
+
     public static void main(String[] args) {
 
         API api = new API();
 
         String login = "williec";
-        String password = "<fill this in>";
+        String password = "";
 
         // Connect to FXServer
         FXClient fxclient = api.createFXGame();
@@ -26,15 +27,15 @@ public class RateTicker {
             e.printStackTrace();
         }
 
-        //Register rate ticker event
-        System.out.print("login complete. Registering listeners...");
-        Ticker t = new Ticker();
-        try {
-            fxclient.getRateTable().getEventManager().add(t);
-        } catch (SessionException e) {
-            fxclient.logout();
-            System.exit(1);
-        }
+//        //Register rate ticker event
+//        System.out.print("login complete. Registering listeners...");
+//        Ticker t = new Ticker();
+//        try {
+//            fxclient.getRateTable().getEventManager().add(t);
+//        } catch (SessionException e) {
+//            fxclient.logout();
+//            System.exit(1);
+//        }
 
         //Register pair watcher event
         PairWatch pw = new PairWatch("EUR/USD");
@@ -58,15 +59,15 @@ public class RateTicker {
     }
 }
 
-class Ticker extends FXRateEvent {
-    // No key set and no match implemented; this event matches all RateEventInfos
-
-    public void handle(FXEventInfo EI, FXEventManager EM) {
-        //Just print the tick
-        FXRateEventInfo REI = (FXRateEventInfo) EI;
-        System.out.println(REI.getPair() + ":" + REI.getTick());
-    }
-}
+//class Ticker extends FXRateEvent {
+//    // No key set and no match implemented; this event matches all RateEventInfos
+//
+//    public void handle(FXEventInfo EI, FXEventManager EM) {
+//        //Just print the tick
+//        FXRateEventInfo REI = (FXRateEventInfo) EI;
+//        System.out.println(REI.getTick());
+//    }
+//}
 
 class PairWatch extends FXRateEvent {
     public PairWatch(String s) {
@@ -75,20 +76,21 @@ class PairWatch extends FXRateEvent {
 
     public void handle(FXEventInfo EI, FXEventManager EM) {
         FXRateEventInfo REI = (FXRateEventInfo) EI;
-        FXTick currTick = REI.getTick();
-        if (lastTick == null) // Init the tick value if no previous one is available
-        {
+        FXTick fxTick = REI.getTick();
+        if (lastTick == null) {
+            // Init the tick value if no previous one is available
             lastTick = REI.getTick();
             return;
-        } else //Compare the current and previous tick values
-        {
-            if (currTick.getBid() > lastTick.getBid())
+        } else {
+            //Compare the current and previous tick values
+            System.out.println(fxTick);
+            if (fxTick.getBid() > lastTick.getBid())
                 System.out.println(REI.getPair() + " has gone up");
-            else if (currTick.getBid() < lastTick.getBid())
+            else if (fxTick.getBid() < lastTick.getBid())
                 System.out.println(REI.getPair() + " has gone down");
             else
                 System.out.println(REI.getPair() + " hasn't changed");
-            lastTick = currTick;
+            lastTick = fxTick;
         }
     }
 
