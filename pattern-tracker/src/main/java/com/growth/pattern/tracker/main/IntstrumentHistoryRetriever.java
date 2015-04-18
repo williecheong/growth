@@ -7,26 +7,32 @@ import com.oanda.fxtrade.api.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IntstrumentHistoryRetriever {
 
-    public static void main(String[] args) throws OAException, InterruptedException, UnknownHostException {
+    static String login = "williec";
+    static String password = "";
 
-        API api = new API();
+    static API api = new API();
+    // Connect to FXServer
+    static FXClient fxclient = api.createFXGame();
 
-        String login = "williec";
-        String password = "";
 
-        // Connect to FXServer
-        FXClient fxclient = api.createFXGame();
 
+    public static void main(String[] args) throws OAException, InterruptedException, IOException {
+
+        // start things up
         fxclient.setWithRateThread(true);
-
         fxclient.login(login, password);
 
 
         // inputs:
+
+        // eventually we want to use the smallest interval (5 seconds)
 
         long interval = FXClient.INTERVAL_1_DAY;
 //        int numTicks = 5;
@@ -49,29 +55,58 @@ public class IntstrumentHistoryRetriever {
 
         Object[] resultArray = fxclient.getRateTable().getCandles(fxPair, interval, 0,
                 periodStart.getMillis() / 1000, periodEnd.getMillis() / 1000).toArray();
+
         // not accounting for leap years, but fuck it
         // diving by 1000 to convert from millis to seconds (for epoch)
 
-        GrowthCandlePoint[] candlePoints = new GrowthCandlePoint[314];
+        List<GrowthCandlePoint> candlePoints = new ArrayList<>();
 
-        int count= 0;
         for (Object o : resultArray) {
             CandlePoint candlePoint = (CandlePoint) o;
-            candlePoints[count] = new GrowthCandlePoint(candlePoint);
-            count++;
+            candlePoints.add(new GrowthCandlePoint(candlePoint));
         }
-        System.out.println(count);
+        System.out.println("# of candle points " + candlePoints.size());
 
 
-        System.out.println(candlePoints[0]);
+        saveYearCandleStickData(periodStart, candlePoints);
 
-        // open db connection
-        PatternsDb patternsDb = new PatternsDb();
-        patternsDb.insertYearCandleStickData(periodStart, candlePoints);
-        System.out.println("Inserted Candle Data to: " + patternsDb.getCollectionName());
+        List<GrowthCandlePoint> someCandles = loadCandleStickDataForYear(periodEnd);
 
 
         //Done, quit now
         fxclient.logout();
     }
+
+
+    public static void saveYearCandleStickData(DateTime periodStart, List<GrowthCandlePoint> candlePoints) throws UnknownHostException {
+        // open db connection
+        PatternsDb patternsDb = new PatternsDb();
+        patternsDb.insertYearCandleStickData(periodStart, candlePoints);
+        System.out.println("Inserted candle data to: " + patternsDb.getCollectionName());
+    }
+
+    public static List<GrowthCandlePoint> loadCandleStickDataForYear(DateTime yearDate) throws IOException {
+        // open db connection
+        PatternsDb patternsDb = new PatternsDb();
+        List<GrowthCandlePoint> candles = patternsDb.loadCandleStickDataForYear(yearDate);
+        System.out.println("Retrieved candle data from: " + patternsDb.getCollectionName());
+        return candles;
+    }
+
+
+    // function to retrieve candlestick data between two dates and patch together the info
+    // this is to get around Oanda's 5000 data point issue
+    public static void retrieveCandleStickDataInChunks(DateTime startPeriod, DateTime endPeriod) throws SessionDisconnectedException {
+
+
+        // grab date, convert to human readable format
+
+
+
+//        Object[] resultArray = fxclient.getRateTable().getCandles(fxPair, interval, 0,
+//                periodStart.getMillis() / 1000, periodEnd.getMillis() / 1000).toArray();
+
+    }
+
+
 }

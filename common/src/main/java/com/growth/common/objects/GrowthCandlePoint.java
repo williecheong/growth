@@ -1,11 +1,12 @@
 package com.growth.common.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mongodb.BasicDBObject;
 import com.oanda.fxtrade.api.CandlePoint;
 import lombok.Data;
 
 @Data
-public class GrowthCandlePoint implements CandlePoint {
+public class GrowthCandlePoint extends BasicDBObject implements CandlePoint {
 
     @JsonProperty
     double close;
@@ -18,7 +19,7 @@ public class GrowthCandlePoint implements CandlePoint {
     @JsonProperty
     long timestamp;
 
-    public GrowthCandlePoint (CandlePoint candlePoint) {
+    public GrowthCandlePoint(CandlePoint candlePoint) {
         // constructor from Oanda's object into ours
 
         close = candlePoint.getClose();
@@ -26,6 +27,17 @@ public class GrowthCandlePoint implements CandlePoint {
         min = candlePoint.getMin();
         open = candlePoint.getOpen();
         timestamp = candlePoint.getTimestamp();
+
+        this.put("close", close);
+        this.put("max", max);
+        this.put("min", min);
+        this.put("open", open);
+        this.put("timestamp", timestamp);
+    }
+
+
+    // dummy constructor
+    public GrowthCandlePoint() {
     }
 
 
@@ -33,6 +45,7 @@ public class GrowthCandlePoint implements CandlePoint {
 
     @Override
     public Object clone() {
+        // todo: hopefully not this...
         try {
             throw new CloneNotSupportedException();
         } catch (CloneNotSupportedException e) {
@@ -40,5 +53,19 @@ public class GrowthCandlePoint implements CandlePoint {
         }
         // lol......
         return null;
+    }
+
+    @Override
+    public String toString() {
+        // todo: not this
+        String json = "{";
+
+        for (String key : keySet()) {
+            json += "\"" + key + "\":\"" + this.get(key) + "\",";
+        }
+
+        json = json.substring(0,json.length()-1) + "}";
+
+        return json;
     }
 }
