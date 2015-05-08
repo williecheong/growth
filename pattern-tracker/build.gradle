@@ -10,6 +10,8 @@ repositories {
 
 dependencies {
 	compile project(':common')
+    
+    compile files("lib/oanda_fxtrade.jar")
 }
 
 jar {
